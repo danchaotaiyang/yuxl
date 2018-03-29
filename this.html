@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script>
+
+	var o = {
+		base: 1
+	}
+
+	var ary = (a) => {
+		console.log(this);
+		console.log(this.base + a);
+	}
+
+	var ary2 = function (a) {
+		console.log(this);
+		console.log(this.base + a);
+	}
+
+	ary.call(o, 2);
+ary2.call(o, 2);
+
+
+	</script>
+</body>
+</html>

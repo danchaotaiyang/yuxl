@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div class="wrap">
+  <div id="app">
+    {{a}}
+    <br>
+    {{getCount}}
+  </div>
+</div>
+<script src="https://cdn.bootcss.com/vue/2.4.4/vue.min.js"></script>
+<script src="https://cdn.bootcss.com/vuex/2.4.1/vuex.min.js"></script>
+<script>
+  var app = new Vue({
+    el: '#app',
+    data: {
+      a: 1
+    },
+    store: new Vuex.Store({
+      state: {
+        count: 1
+      },
+      getters: {
+        getCount: state => {
+          return state.count += 2;
+        }
+      }
+    }),
+    computed: {
+      ...Vuex.mapState(['count']),
+      ...Vuex.mapGetters(['getCount'])
+    }
+  });
+</script>
+</body>
+</html>

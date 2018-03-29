@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+</head>
+
+<body>
+<script>
+
+
+const LinkedList = (() => {
+    class Node {
+        constructor(element) {
+            this.element = element;
+            this.next = null;
+        }
+    }
+
+    let length = 0;
+    let head = null;
+
+    class LinkedList {
+        append(element) {
+            let node = new Node(element), current;
+            if (head === null) {
+                head = node;
+            } else {
+                current = head;
+                while (current.next) {
+                    current = current.next;
+                }
+                current.next = node;
+            }
+            length++;
+        }
+
+        insert(position, element) {
+            if (position > -1 || position <= length) {
+                let node = new Node(element), current = head, previous, index = 0;
+                if (position === 0) {
+                    node.next = current;
+                    head = node;
+                } else {
+                    while (index++ < position) {
+                        previous = current;
+                        current = current.next;
+                    }
+                    node.next = current;
+                    previous.next = node;
+                }
+                length++;
+
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        removeAt(position) {
+            if (position > -1 || position < length) {
+                let current = head, previous, index = 0;
+                if (position === 0) {
+                    head = current.next;
+                } else {
+                    while (index++ < position) {
+                        previous = current;
+                        current = current.next;
+                    }
+                    previous.next = current.next;
+                }
+                length--;
+                return current.element;
+            } else {
+                return null;
+            }
+        }
+
+        remove(element) {
+            let index = this.indexOf(element);
+            this.removeAt(index);
+        }
+
+        indexOf(element) {
+            let current = head, index = 0;
+            while (current) {
+                if (element === current.element) {
+                    return index;
+                }
+                index++;
+                current = current.next;
+            }
+            return -1;
+        }
+
+        isEmpty() {
+            return length === 0;
+        }
+
+        size() {
+            return length;
+        }
+
+        getHead() {
+            return head;
+        }
+
+        toString() {
+            let current = head, string = '';
+            while (current) {
+                string = `${string}${current.element}${current.next ? ',' : ''}`;
+                current = current.next;
+            }
+            return string;
+        }
+
+        print() {
+            console.log(head);
+        }
+    }
+
+    return LinkedList;
+})();
+
+const abc = new LinkedList();
+
+abc.append(234);
+abc.append(36);
+abc.append(1);
+abc.append(6789);
+abc.append(25);
+abc.append(1);
+abc.append(9239);
+
+abc.insert(4, 'abc');
+
+abc.print();
+
+</script>
+</body>
+
+</html>

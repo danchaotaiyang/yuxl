@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+<script>
+let Stack = (() => {
+	const item = new WeakMap();
+	class Stack {
+		constructor() {
+			item.set(this, []);
+		}
+		push(element) {
+			item.get(this).push(element);
+		}
+		pop() {
+			return item.get(this).pop();
+		}
+		peek() {
+			let stack = item.get(this);
+			return stack[stack.length - 1];
+		}
+		isEmpty() {
+			return item.get(this).length === 0;
+		}
+		size() {
+			return item.get(this).length;
+		}
+		reverse() {
+			return [...item.get(this)].reverse();
+		}
+		clear() {
+			item.set(this, []);
+		}
+		print() {
+			console.log(item.get(this).toString());
+		}
+	};
+	return Stack;
+})();
+
+
+
+const divideBy2 = (decNumber) => {
+	let remStack = new Stack(), binaryString = '';
+
+	while (decNumber > 0) {
+		remStack.push(decNumber % 2 | 0);
+		decNumber = decNumber / 2 | 0;
+	}
+
+	while (!remStack.isEmpty()) {
+		binaryString += remStack.pop().toString();
+	}
+	// binaryString = remStack.reverse().join('');
+	remStack.print();
+	return binaryString;
+
+};
+
+const baseConverter = (decNumber, base = 2) => {
+	const DIGITS = '0123456789ABCDEF';
+	let remStack = new Stack(), baseString = '';
+
+	while (decNumber > 0) {
+		remStack.push(decNumber % base | 0);
+		decNumber = decNumber / base | 0;
+	}
+
+	while (!remStack.isEmpty()) {
+		baseString += DIGITS[remStack.pop()];
+	}
+	// binaryString = remStack.reverse().join('');
+	remStack.print();
+	return baseString;
+
+};
+
+console.log(divideBy2(4333215));
+console.log(baseConverter(4333215))
+console.log(baseConverter(4333215, 8))
+console.log(baseConverter(4333215, 16))
+
+
+// 10       10 % 2 = 0   10 ÷ 2 = 5
+// 5        5  % 2 = 1   5  ÷ 2 = 2
+// 2        2  % 2 = 0   2  ÷ 2 = 1
+// 1        1  % 2 = 1   1  ÷ 2 = 0
+
+// 4333215  4333215 % 8 = 7  4333215 ÷ 8 = 541651
+// 541651   541651  % 8 = 3  541651  ÷ 8 = 67706
+// 67706    67706   % 8 = 2  67706   ÷ 8 = 8463
+// 8463     8463    % 8 = 7  8463    ÷ 8 = 1057
+// 1057     1057    % 8 = 1  1057    ÷ 8 = 132
+// 132      132     % 8 = 4  132     ÷ 8 = 16
+// 16       16      % 8 = 0  16      ÷ 8 = 2
+// 2        2       % 8 = 2  2       ÷ 8 = 0
+
+// 4333215  4333215 % 16 = 15  4333215 ÷ 16 = 270825
+// 270825   270825  % 16 = 9   270825  ÷ 16 = 16926
+// 16926    16926   % 16 = 14  16926   ÷ 16 = 1057
+// 1057     1057    % 16 = 1   1057    ÷ 16 = 66
+// 66       66      % 16 = 2   66      ÷ 16 = 4
+// 4        4       % 16 = 4   4       ÷ 16 = 0
+
+// 4 2 1 14 9 15 = 421e9f
+
+
+</script>
+</body>
+</html>

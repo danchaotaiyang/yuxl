@@ -1,0 +1,43 @@
+node = xxxfff000;
+
+head = xxxfff000 = {
+	element: 1,
+	next: null
+}
+
+length = 1
+
+
+
+node = xxxfff111
+
+current = head = xxxfff000
+
+xxxfff000.next = xxxfff111
+
+length = 2
+
+
+
+node = xxxfff222
+
+current = head = xxxfff000
+
+current = xxxfff000.next = xxxfff111
+
+xxxfff111.next = xxxfff222
+
+length = 3
+
+
+node = xxxfff333
+
+current = head = xxxfff000
+
+current = xxxfff000.next = xxxfff111
+
+current = xxxfff111.next = xxxfff222
+
+xxxfff222.next = xxxfff333
+
+length = 4
