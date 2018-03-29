@@ -129,11 +129,20 @@ const DoublyLinkedList = (() => {
         }
 
         remove(element) {
-
+            let index = this.indexOf(element);
+            return index > -1 && this.removeAt(index);
         }
 
         indexOf(element) {
-
+            let current = head, index = 0;
+            while (current) {
+                if (element === current.element) {
+                    return index;
+                }
+                index++;
+                current = current.next;
+            }
+            return -1;
         }
 
         isEmpty() {

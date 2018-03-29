@@ -135,7 +135,7 @@ var DoublyLinkedList = function () {
 
     this.remove = function (element) {
         var index = this.indexOf(element);
-        return this.removeAt(index);
+        return index > -1 && this.removeAt(index);
     };
 
     this.indexOf = function (element) {
