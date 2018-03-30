@@ -8,27 +8,35 @@
 <script>
 var Stack = function () {
 	var items = [];
+
 	this.push = function (element) {
 		items.push(element);
 	};
+
 	this.pop = function () {
 		return items.pop();
 	};
+
 	this.peek = function () {
 		return item[items.length - 1];
 	};
+
 	this.isEmpty = function () {
 		return items.length === 0;
 	};
+
 	this.size = function () {
 		return items.length;
 	};
+
 	this.reverse = function () {
 		return items.slice().reverse();
 	};
+
 	this.clear = function () {
 		items = [];
 	};
+
 	this.print = function () {
 		console.log(items.toString());
 	};
@@ -50,8 +58,8 @@ var divideBy2 = function (decNumber) {
 	// }
 	binaryString = remStack.reverse().join('');
 	remStack.print();
-	return binaryString;
 
+	return binaryString;
 };
 
 console.log(divideBy2(81));

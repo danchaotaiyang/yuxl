@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Title</title>
+</head>
+<body>
+<script>
+
+function Set() {
+
+    let items = {};
+
+    this.add = function (value) {
+        if (this.has(value)) {
+            return false;
+        }
+        items[value] = value;
+        console.log(items);
+        return true;
+    };
+
+    this.remove = function (value) {
+        if (!this.has(value)) {
+            return false;
+        }
+        delete items[value];
+        return true;
+    };
+
+    this.has = function (value) {
+        // return value in items;
+        return items.hasOwnProperty(value);
+    };
+
+    this.clear = function () {
+        items = {};
+    };
+
+    this.size = function () {
+        return Object.keys(items).length;
+    };
+
+    this.sizeLegacy = function () {
+        let count = 0;
+        for (let key in items) {
+            if (items.hasOwnProperty(key)) {
+                ++count;
+            }
+        }
+        return count;
+    };
+
+    this.values = function () {
+
+    };
+}
+
+</script>
+</body>
+</html>

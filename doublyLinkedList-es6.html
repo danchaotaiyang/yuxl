@@ -27,12 +27,18 @@ const DoublyLinkedList = (() => {
             if (head === null) {
                 head = node;
             } else {
+/*
                 current = head;
                 while (current.next) {
                     current = current.next;
                 }
                 current.next = node;
                 node.prev = current;
+*/
+
+                current = tail;
+                node.prev = current;
+                current.next = node;
             }
 
             tail = node;
@@ -67,18 +73,18 @@ const DoublyLinkedList = (() => {
 
                     node.prev = current;
                     node.next = previous;
-                    current.next = node;
                     previous.prev = node;
+                    current.next = node;
                 } else {
-                    while(index++ < position) {
+                    while (index++ < position) {
                         previous = current;
                         current = current.next;
                     }
 
                     node.prev = previous;
                     node.next = current;
-                    current.prev = node;
                     previous.next = node;
+                    current.prev = node;
                 }
             }
 
@@ -183,12 +189,18 @@ abc.append(2);
 abc.append(3);
 abc.append(4);
 abc.append(5);
+abc.append(6);
+abc.append(7);
+abc.append(8);
+abc.append(9);
+abc.append(10);
 
 abc.print();
 
-abc.insert(2, 22);
+abc.insert(8, 22);
 abc.print();
 
+/*
 abc.insert(-5, 0);
 abc.print();
 
@@ -203,6 +215,7 @@ abc.print();
 
 console.log(abc.removeAt(11));
 abc.print();
+*/
 
 
 </script>
