@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Title</title>
+</head>
+<body>
+<script>
+
+const Set = (() => {
+    let items = {};
+    class Set {
+        add(value) {
+            if (this.has(value)) {
+                return false;
+            }
+            items[value] = value;
+            return true;
+        }
+
+        remove(value) {
+            if (!this.has(value)) {
+                return false;
+            }
+            delete items[value];
+            return true;
+        }
+
+        has(value) {
+            return items.hasOwnProperty(value);
+        }
+
+        clear() {
+            item = {};
+        }
+
+        size() {
+            return Object.keys(items).length;
+        }
+
+        sizeLegacy() {
+            let count = 0;
+            for (let key in items) {
+                if (this.has(key)) ++count;
+            }
+            return count;
+        }
+
+        values() {
+            let values = [];
+
+            for (let i = 0, keys = Object.keys(items); i < keys.length; i++) {
+                values.push(items[keys[i]]);
+            }
+
+            return values;
+        }
+
+        valuesLegacy() {
+            let values = [];
+
+            for (let key in items) {
+                if (items.hasOwnProperty(key)) {
+                    values.push(items[key]);
+                }
+            }
+
+            return values;
+        }
+    }
+    return Set;
+})();
+
+let set = new Set();
+
+set.add(2);
+set.add(3);
+set.add(1);
+set.add(8);
+set.add(2);
+set.remove(1);
+
+console.log(set.values());
+console.log(set.has(2));
+
+console.log(set.sizeLegacy());
+
+
+</script>
+</body>
+</html>

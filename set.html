@@ -16,7 +16,6 @@ function Set() {
             return false;
         }
         items[value] = value;
-        console.log(items);
         return true;
     };
 
@@ -44,17 +43,44 @@ function Set() {
     this.sizeLegacy = function () {
         let count = 0;
         for (let key in items) {
-            if (items.hasOwnProperty(key)) {
-                ++count;
-            }
+            if (items.hasOwnProperty(key)) ++count;
         }
         return count;
     };
 
     this.values = function () {
+        var values = [];
+        for (var i = 0, keys = Object.keys(items); i < keys.length; i++) {
+            values.push(items[keys[i]]);
+        }
+        return values;
+    };
 
+    this.valuesLegacy = function () {
+        var values = [];
+        for (var key in items) {
+            if (items.hasOwnProperty(key)) {
+                values.push(items[key]);
+            }
+        }
+        return values;
     };
 }
+
+let set = new Set();
+
+set.add(2);
+set.add(3);
+set.add(1);
+set.add(8);
+set.add(2);
+set.remove(1);
+
+console.log(set.values());
+console.log(set.has(2));
+
+console.log(set.sizeLegacy());
+
 
 </script>
 </body>
