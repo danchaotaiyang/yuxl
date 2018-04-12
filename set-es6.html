@@ -6,15 +6,21 @@
 </head>
 <body>
 <script>
+console.time('set-es6');
 
 const Set = (() => {
-    let items = {};
+    const items = new WeakMap();
+
     class Set {
+        constructor() {
+            items.set(this, {});
+        }
+
         add(value) {
             if (this.has(value)) {
                 return false;
             }
-            items[value] = value;
+            items.get(this)[value] = value;
             return true;
         }
 
@@ -22,69 +28,107 @@ const Set = (() => {
             if (!this.has(value)) {
                 return false;
             }
-            delete items[value];
+            delete items.get(this)[value];
             return true;
         }
 
         has(value) {
-            return items.hasOwnProperty(value);
+            return items.get(this).hasOwnProperty(value);
         }
 
         clear() {
-            item = {};
+            items.set(this, {});
         }
 
         size() {
-            return Object.keys(items).length;
-        }
-
-        sizeLegacy() {
-            let count = 0;
-            for (let key in items) {
-                if (this.has(key)) ++count;
-            }
-            return count;
+            return Object.keys(items.get(this)).length;
         }
 
         values() {
             let values = [];
-
-            for (let i = 0, keys = Object.keys(items); i < keys.length; i++) {
-                values.push(items[keys[i]]);
-            }
-
+            Object.values(items.get(this)).forEach(item => values.push(item));
             return values;
         }
 
-        valuesLegacy() {
-            let values = [];
+        union(other) {
+            let union = new Set();
 
-            for (let key in items) {
-                if (items.hasOwnProperty(key)) {
-                    values.push(items[key]);
+            [...this.values(), ...other.values()].forEach(item => union.add(item));
+
+            return union;
+        }
+
+        intersection(other) {
+            let intersection = new Set();
+
+            this.values().forEach(item => other.has(item) && intersection.add(item));
+
+            return intersection;
+        }
+
+        difference(other) {
+            let difference = new Set();
+
+            this.values().forEach(item => !other.has(item) && difference.add(item));
+
+            return difference;
+        }
+
+        isSubset(other) {
+            if (this.size() > other.size()) {
+                return false;
+            }
+
+            let values = this.values();
+
+            for (let i of values) {
+                if (!other.has(i)) {
+                    return false;
                 }
             }
 
-            return values;
+            return true;
         }
     }
+
     return Set;
 })();
 
-let set = new Set();
 
-set.add(2);
-set.add(3);
-set.add(1);
-set.add(8);
-set.add(2);
-set.remove(1);
+let setA = new Set();
 
-console.log(set.values());
-console.log(set.has(2));
+setA.add(2);
+setA.add(3);
+setA.add(1);
+setA.add(8);
+setA.add(2);
 
-console.log(set.sizeLegacy());
+let setB = new Set();
 
+setB.add(23);
+setB.add(67);
+setB.add(93);
+setB.add(14);
+setB.add(723);
+setB.add(8);
+setB.add(3);
+setB.add(1);
+setB.add(8);
+setB.add(2);
+
+console.log(setB.remove(723));
+
+let union = setA.union(setB);
+let inter = setA.intersection(setB);
+let diffe = setA.difference(setB);
+let isSub = setA.isSubset(setB);
+
+console.log('并集', union.values());
+console.log('交集', inter.values());
+console.log('差集', diffe.values());
+console.log('子集', isSub);
+
+console.timeEnd('set-es6');
 
 </script>
 </body>

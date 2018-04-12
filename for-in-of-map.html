@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Title</title>
+</head>
+<body>
+<script>
+
+var ary = new Array(100000).fill(0);
+
+var ary2 = [];
+
+var ary3 = [];
+
+let ary4 = [];
+
+let ary5 = [];
+
+// ===============================
+
+console.time('for-in');
+
+for (var i in ary) {
+    ary2.push(i);
+}
+
+console.timeEnd('for-in');
+
+// ===============================
+
+console.time('for-of');
+
+for (var j of ary) {
+    ary3.push(j);
+}
+
+console.timeEnd('for-of');
+
+// ===============================
+
+console.time('map');
+
+ary4 = ary.map(i => i);
+
+console.timeEnd('map');
+
+// ===============================
+
+console.time('forEach');
+
+ary.forEach(i => ary5.push(i));
+
+console.timeEnd('forEach');
+
+// ===============================
+
+</script>
+</body>
+</html>

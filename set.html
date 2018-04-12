@@ -6,6 +6,7 @@
 </head>
 <body>
 <script>
+console.time('set');
 
 function Set() {
 
@@ -37,10 +38,6 @@ function Set() {
     };
 
     this.size = function () {
-        return Object.keys(items).length;
-    };
-
-    this.sizeLegacy = function () {
         let count = 0;
         for (let key in items) {
             if (items.hasOwnProperty(key)) ++count;
@@ -50,14 +47,6 @@ function Set() {
 
     this.values = function () {
         var values = [];
-        for (var i = 0, keys = Object.keys(items); i < keys.length; i++) {
-            values.push(items[keys[i]]);
-        }
-        return values;
-    };
-
-    this.valuesLegacy = function () {
-        var values = [];
         for (var key in items) {
             if (items.hasOwnProperty(key)) {
                 values.push(items[key]);
@@ -65,21 +54,102 @@ function Set() {
         }
         return values;
     };
+
+    this.union = function (other) {
+        var union = new Set(), values;
+
+        values = this.values();
+
+        for (var i = 0; i < values.length; i++) {
+            union.add(values[i]);
+        }
+
+        values = other.values();
+
+        for (var j = 0; j < values.length; j++) {
+            union.add(values[j]);
+        }
+
+        return union;
+    };
+
+    this.intersection = function (other) {
+        var intersection = new Set();
+
+        var values = this.values();
+
+        for (var i = 0; i < values.length; i++) {
+            if (other.has(values[i])) {
+                intersection.add(values[i]);
+            }
+        }
+
+        return intersection;
+    };
+
+    this.difference = function (other) {
+        var difference = new Set();
+
+        var values = this.values();
+
+        for (var i = 0; i < values.length; i++) {
+            if (!other.has(values[i])) {
+                difference.add(values[i]);
+            }
+        }
+
+        return difference;
+    };
+
+    this.isSubset = function (other) {
+        if (this.size() > other.size()) {
+            return false;
+        }
+        var values = this.values();
+        for (var i = 0; i < values.length; i++) {
+            if (!other.has(values[i])) {
+                return false;
+            }
+        }
+        return true;
+    };
 }
 
-let set = new Set();
 
-set.add(2);
-set.add(3);
-set.add(1);
-set.add(8);
-set.add(2);
-set.remove(1);
+let setA = new Set();
 
-console.log(set.values());
-console.log(set.has(2));
+setA.add(2);
+setA.add(3);
+setA.add(1);
+setA.add(8);
+setA.add(2);
 
-console.log(set.sizeLegacy());
+let setB = new Set();
+
+setB.add(23);
+setB.add(67);
+setB.add(93);
+setB.add(14);
+setB.add(723);
+setB.add(8);
+setB.add(3);
+setB.add(1);
+setB.add(8);
+setB.add(2);
+
+console.log(setB.remove(723));
+
+let union = setA.union(setB);
+let inter = setA.intersection(setB);
+let diffe = setA.difference(setB);
+let isSub = setA.isSubset(setB);
+
+console.log('并集', union.values());
+console.log('交集', inter.values());
+console.log('差集', diffe.values());
+console.log('子集', isSub);
+
+console.timeEnd('set');
 
 
 </script>
