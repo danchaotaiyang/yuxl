@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Title</title>
+</head>
+<body>
+<script>
+
+function HashTable () {
+
+    var table = [];
+
+    var loseloseHashCode = function (key) {
+        var hash = 0;
+        for (var i = 0; i < key.length; i++) {
+            hash += key.charCodeAt(i);
+        }
+        return hash % 37;
+    };
+
+    this.put = function (key, value) {
+
+        var position = loseloseHashCode(key);
+        console.log(position, ' - ', key);
+        table[position] = value;
+
+    };
+
+    this.remove = function (key) {
+        table[loseloseHashCode(key)] = undefined;
+
+    };
+
+    this.get = function (key) {
+        return table[loseloseHashCode(key)];
+    };
+
+    this.getTable = function () {
+        return table;
+    };
+
+}
+
+
+var dictionary = new HashTable();
+dictionary.put('Gandalf', 'gandalf@email.com');
+dictionary.put('John', 'johnsnow@email.com');
+dictionary.put('Tyrion', 'tyrion@email.com');
+
+console.log(dictionary.get('Tyrion'));
+console.log(dictionary.getTable('Tyrion'));
+
+dictionary.remove('John');
+
+
+</script>
+</body>
+</html>

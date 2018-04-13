@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Title</title>
+</head>
+<body>
+<script>
+
+const HashTable = (() => {
+
+    let table = new WeakMap();
+
+    const loseloseHashCode = key => {
+        let hash = 0;
+
+        Array.prototype.forEach.call(key, (item, index) => hash += key.charCodeAt(index));
+
+        return hash % 37;
+    };
+
+    class HashTable {
+        constructor(){
+            table.set(this, []);
+        }
+
+        put(key, value) {
+            let position = loseloseHashCode(key);
+            console.log(`${key} - ${value}`);
+            table.get(this)[position] = value;
+        }
+
+        remove(key) {
+            table.get(this)[loseloseHashCode(key)] = undefined;
+        }
+
+        get(key) {
+            return table.get(this)[loseloseHashCode(key)];
+        }
+
+        getTable() {
+            return table.get(this);
+        }
+    }
+
+    return HashTable;
+})();
+
+
+let dictionary = new HashTable();
+dictionary.put('Gandalf', 'gandalf@email.com');
+dictionary.put('John', 'johnsnow@email.com');
+dictionary.put('Tyrion', 'tyrion@email.com');
+
+console.log(dictionary.get('Tyrion'));
+console.log(dictionary.get('Gandalf'));
+console.log(dictionary.getTable('Tyrion'));
+
+dictionary.remove('John');
+
+
+</script>
+</body>
+</html>
