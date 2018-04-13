@@ -34,7 +34,6 @@ class LinkedList {
 
             current.next = node;
         }
-
         this.length++;
     }
 
@@ -85,6 +84,7 @@ class LinkedList {
 
     remove(element) {
         let index = this.indexOf(element);
+
         this.removeAt(index);
     }
 
@@ -99,7 +99,6 @@ class LinkedList {
             index++;
             current = current.next;
         }
-
         return -1;
     }
 
@@ -212,6 +211,7 @@ const HashTable = (() => {
 
                     current = current.next;
                 }
+
                 if (current.element.key === key) {
                     return current.element.value;
                 }
