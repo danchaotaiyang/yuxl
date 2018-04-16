@@ -19,6 +19,14 @@ let ary5 = [];
 
 // ===============================
 
+console.time('forEach');
+
+ary.forEach(i => ary5.push(i));
+
+console.timeEnd('forEach');
+
+// ===============================
+
 console.time('for-in');
 
 for (var i in ary) {
@@ -44,14 +52,6 @@ console.time('map');
 ary4 = ary.map(i => i);
 
 console.timeEnd('map');
-
-// ===============================
-
-console.time('forEach');
-
-ary.forEach(i => ary5.push(i));
-
-console.timeEnd('forEach');
 
 // ===============================
 

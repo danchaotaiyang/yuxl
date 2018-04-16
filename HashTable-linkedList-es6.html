@@ -14,121 +14,139 @@ class Node {
     }
 }
 
-class LinkedList {
-    constructor() {
-        this.length = 0;
-        this.head = null;
-    }
+const LinkedList = (() => {
+    const length = new WeakMap();
+    const head = new WeakMap();
 
-    append(element) {
-        let node = new Node(element), current;
+    class LinkedList {
+        constructor() {
+            let header = null;
+            let len = 0;
+            length.set(this, len);
+            head.set(this, header);
+            // this.length = 0;
+            // this.head = null;
+        }
 
-        if (this.head === null) {
-            this.head = node;
-        } else {
-            current = this.head;
+        append(element) {
+            let node = new Node(element), current;
 
-            while (current.next) {
+            if (head.get(this) === null) {
+                head.set(this, node);
+            } else {
+                current = head.get(this);
+
+                while (current.next) {
+                    current = current.next;
+                }
+
+                current.next = node;
+            }
+            // this.length++;
+            length.set(this, length.get(this) + 1);
+        }
+
+        insert(position, element) {
+            if (position > -1 || position <= length.get(this)) {
+                let node = new Node(element), current = head.get(this), previous, index = 0;
+
+                if (position === 0) {
+                    node.next = current;
+                    head.set(this, node);
+                } else {
+                    while (index++ < position) {
+                        previous = current;
+                        current = current.next;
+                    }
+
+                    node.next = current;
+                    previous.next = node;
+                }
+
+                length.set(this, length.get(this) + 1);
+                // this.length++;
+
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        removeAt(position) {
+            if (position > -1 || position < length.get(this)) {
+                let current = head.get(this), previous, index = 0;
+
+                if (position === 0) {
+                    head.set(this, current.next);
+                } else {
+                    while (index++ < position) {
+                        previous = current;
+                        current = current.next;
+                    }
+                    previous.next = current.next;
+                }
+
+                length.set(this, length.get(this) - 1);
+                // this.length--;
+
+                return current.element;
+            } else {
+                return null;
+            }
+        }
+
+        remove(element) {
+            let index = this.indexOf(element);
+
+            this.removeAt(index);
+        }
+
+        indexOf(element) {
+            let current = head.get(this), index = 0;
+
+            while (current) {
+                if (element === current.element) {
+                    return index;
+                }
+
+                index++;
+                current = current.next;
+            }
+            return -1;
+        }
+
+        isEmpty() {
+            return this.size() === 0;
+            // return this.length === 0;
+        }
+
+        size() {
+            return length.get(this);
+            // return this.length;
+        }
+
+        getHead() {
+            return head.get(this);
+        }
+
+        toString() {
+            let current = head.get(this), string = '';
+
+            while (current) {
+                string = `${string}${current.element}${current.next ? ',' : ''}`;
                 current = current.next;
             }
 
-            current.next = node;
+            return string;
         }
-        this.length++;
-    }
 
-    insert(position, element) {
-        if (position > -1 || position <= this.length) {
-            let node = new Node(element), current = this.head, previous, index = 0;
-
-            if (position === 0) {
-                node.next = current;
-                this.head = node;
-            } else {
-                while (index++ < position) {
-                    previous = current;
-                    current = current.next;
-                }
-
-                node.next = current;
-                previous.next = node;
-            }
-
-            this.length++;
-            return true;
-        } else {
-            return false;
+        print() {
+            console.log(head.get(this));
         }
     }
 
-    removeAt(position) {
-        if (position > -1 || position < this.length) {
-            let current = this.head, previous, index = 0;
-
-            if (position === 0) {
-                this.head = current.next;
-            } else {
-                while (index++ < position) {
-                    previous = current;
-                    current = current.next;
-                }
-                previous.next = current.next;
-            }
-
-            this.length--;
-            return current.element;
-        } else {
-            return null;
-        }
-    }
-
-    remove(element) {
-        let index = this.indexOf(element);
-
-        this.removeAt(index);
-    }
-
-    indexOf(element) {
-        let current = this.head, index = 0;
-
-        while (current) {
-            if (element === current.element) {
-                return index;
-            }
-
-            index++;
-            current = current.next;
-        }
-        return -1;
-    }
-
-    isEmpty() {
-        return this.length === 0;
-    }
-
-    size() {
-        return this.length;
-    }
-
-    getHead() {
-        return this.head;
-    }
-
-    toString() {
-        let current = this.head, string = '';
-
-        while (current) {
-            string = `${string}${current.element}${current.next ? ',' : ''}`;
-            current = current.next;
-        }
-
-        return string;
-    }
-
-    print() {
-        console.log(this.head);
-    }
-}
+    return LinkedList;
+})();
 
 class ValuePair {
     constructor(key, value) {
@@ -142,76 +160,84 @@ class ValuePair {
 }
 
 const HashTable = (() => {
-    const loseloseHashCode = key => {
-        let hash = 0;
 
+    const table = new WeakMap();
+
+    const loseloseHashCode = key => {
+
+        let hash = 0;
         Array.prototype.forEach.call(key, (item, index) => hash += key.charCodeAt(index));
 
         return hash % 37;
     };
 
+    const djb2HashCode = key => {
+        let hash = 5381;
+        for (let i = 0; i < key.length; i++) {
+            hash = hash * 33 + key.charCodeAt(i);
+        }
+        return hash % 1013;
+    };
+
     class HashTable {
         constructor() {
-            this.table = new WeakMap();
-            this.table.set(this, []);
+            table.set(this, []);
         }
 
         put(key, value) {
-            let position = loseloseHashCode(key);
 
-            if (this.table.get(this)[position] === undefined) {
-                this.table.get(this)[position] = new LinkedList();
+            let position = djb2HashCode(key);
+
+            if (table.get(this)[position] === undefined) {
+                table.get(this)[position] = new LinkedList();
             }
-
-            this.table.get(this)[position].append(new ValuePair(key, value));
+            table.get(this)[position].append(new ValuePair(key, value));
         }
 
         remove(key) {
-            let position = loseloseHashCode(key);
 
-            if (this.table.get(this)[position] !== undefined) {
-                let current = this.table.get(this)[position].getHead();
+            let position = djb2HashCode(key);
+
+            if (table.get(this)[position] !== undefined) {
+
+                let current = table.get(this)[position].getHead();
 
                 while (current.next) {
                     if (current.element.key === key) {
-                        this.table.get(this)[position].remove(current.element);
 
-                        if (this.table.get(this)[position].isEmpty()) {
-                            this.table.get(this)[position] = undefined;
+                        table.get(this)[position].remove(current.element);
+                        if (table.get(this)[position].isEmpty()) {
+                            table.get(this)[position] = undefined;
                         }
-
                         return true;
                     }
                     current = current.next;
                 }
+
                 if (current.element.key === key) {
-                    this.table.get(this)[position].remove(current.element);
 
-                    if (this.table.get(this)[position].isEmpty()) {
-                        this.table.get(this)[position] = undefined;
+                    table.get(this)[position].remove(current.element);
+                    if (table.get(this)[position].isEmpty()) {
+                        table.get(this)[position] = undefined;
                     }
-
                     return true;
                 }
             }
-
             return false;
         }
 
         get(key) {
-            let position = loseloseHashCode(key);
+            let position = djb2HashCode(key);
 
-            if (this.table.get(this)[position] !== undefined) {
-                let current = this.table.get(this)[position].getHead();
+            if (table.get(this)[position] !== undefined) {
 
+                let current = table.get(this)[position].getHead();
                 while (current.next) {
                     if (current.element.key === key) {
                         return current.element.value;
                     }
-
                     current = current.next;
                 }
-
                 if (current.element.key === key) {
                     return current.element.value;
                 }
@@ -221,7 +247,7 @@ const HashTable = (() => {
         }
 
         print() {
-            this.table.get(this).forEach(item => {
+            table.get(this).forEach(item => {
                 if (item !== undefined) console.log(item.getHead());
             });
         }
