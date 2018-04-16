@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Title</title>
+</head>
+<body>
+
+<script>
+
+function BinarySearchTree() {
+    var Node = function (key) {
+        this.key = key;
+        this.left = null;
+        this.right = null;
+    };
+
+    var root = null;
+
+    this.insert = function (key) {
+        var node = new Node(key);
+
+        var insertNode = function (target, node) {
+            if (node.key < target.key) {
+                if (target.left === null) {
+                    target.left = node;
+                } else {
+                    insertNode(target.left, node);
+                }
+            }
+        };
+
+        if (root = null) {
+            root = node;
+        } else {
+            insertNode(root, node);
+        }
+    };
+
+    this.search = function (key) {
+        ;
+    };
+
+    this.inOrderTraverse = function () {
+        ;
+    };
+
+    this.preOrderTraverse = function () {
+        ;
+    };
+
+    postOrderTraverse = function () {
+        ;
+    };
+
+    this.min = function () {
+        ;
+    };
+
+    this.max = function () {
+        ;
+    };
+
+    this.remove = function (key) {
+        ;
+    };
+
+}
+
+</script>
+
+</body>
+</html>
