@@ -3,8 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <title>Title</title>
+<style>
+
+.wrap {
+}
+
+.level {
+    display: inline-block;
+    margin: 10px;
+}
+
+.node  {
+    display: block;
+    text-align: center;
+}
+
+.key {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    /*background-color: #cccccc;*/
+    border: 1px solid #ccc;
+    text-align: center;
+    line-height: 50px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+}
+
+</style>
 </head>
 <body>
+
+<div class="wrap">
+<div class="tree">
+
+</div>
+</div>
 
 <script>
 
@@ -18,54 +53,210 @@ function BinarySearchTree() {
     var root = null;
 
     this.insert = function (key) {
-        var node = new Node(key);
+        var newNode = new Node(key);
 
-        var insertNode = function (target, node) {
-            if (node.key < target.key) {
+        var insertNode = function (target, newNode) {
+            if (newNode.key < target.key) {
                 if (target.left === null) {
-                    target.left = node;
+                    target.left = newNode;
                 } else {
-                    insertNode(target.left, node);
+                    insertNode(target.left, newNode);
+                }
+            } else {
+                if (target.right === null) {
+                    target.right = newNode;
+                } else {
+                    insertNode(target.right, newNode);
                 }
             }
         };
 
-        if (root = null) {
-            root = node;
+        if (root === null) {
+            root = newNode;
         } else {
-            insertNode(root, node);
+            insertNode(root, newNode);
         }
     };
 
     this.search = function (key) {
-        ;
+        var searchNode = function (node, key) {
+            if (node === null) {
+                return false;
+            }
+            if (key < node.key) {
+                return searchNode(node.left, key);
+            } else if (key > node.key) {
+                return searchNode(node.right, key);
+            } else {
+                return true;
+            }
+        };
+        return searchNode(root, key);
     };
 
-    this.inOrderTraverse = function () {
-        ;
+    this.inOrderTraverse = function (cb) {
+        var inOTN = function (node, cb) {
+            if (node !== null) {
+                inOTN(node.left, cb);
+                cb(node.key);
+                inOTN(node.right, cb);
+            }
+        };
+        inOTN(root, cb);
     };
 
-    this.preOrderTraverse = function () {
-        ;
+    this.preOrderTraverse = function (cb) {
+        var preOTN = function (node, cb) {
+            if (node !== null) {
+                cb(node.key);
+                preOTN(node.left, cb);
+                preOTN(node.right, cb);
+            }
+        };
+        preOTN(root, cb);
     };
 
-    postOrderTraverse = function () {
-        ;
+    this.postOrderTraverse = function (cb) {
+        var postOTN = function (node, cb) {
+            if (node !== null) {
+                postOTN(node.left, cb);
+                postOTN(node.right, cb);
+                cb(node.key);
+            }
+        };
+        postOTN(root, cb);
     };
 
     this.min = function () {
-        ;
+        var minNode = function (node) {
+            if (node) {
+                while (node && node.left !== null) {
+                    node = node.left;
+                }
+                return node.key;
+            }
+            return null;
+        };
+        return minNode(root);
     };
 
     this.max = function () {
-        ;
+        var maxNode = function (node) {
+            if (node) {
+                while (node && node.right !== null) {
+                    node = node.right;
+                }
+                return node.key;
+            }
+            return null;
+        };
+        return maxNode(root);
     };
 
     this.remove = function (key) {
-        ;
+        var findMinNode = function (node) {
+            while (node && node.left !== null) {
+                node = node.left;
+            }
+            return node;
+        };
+        var removeNode = function (node, key) {
+            if (node === null) {
+                return null;
+            }
+            if (key < node.key) {
+                node.left = removeNode(node.left, key);
+                return node;
+            } else if (key > node.key) {
+                node.right = removeNode(node.right, key);
+                return node;
+            } else {
+                if (node.left === null && node.right === null) {
+                    node = null;
+                    return node;
+                }
+                if (node.left === null) {
+                    node = node.right;
+                    return node;
+                } else if (node.right === null) {
+                    node = node.left;
+                    return node;
+                }
+
+                var aux = findMinNode(node.right);
+                node.key = aux.key;
+                node.right = removeNode(node.right, aux.key);
+                return node;
+
+            }
+        };
+        root = removeNode(root, key);
+    };
+
+    this.getRoot = function () {
+        return root;
     };
 
 }
+
+
+
+var tree = new BinarySearchTree();
+tree.insert(11);
+tree.insert(7);
+tree.insert(15);
+tree.insert(5);
+tree.insert(6);
+tree.insert(3);
+tree.insert(9);
+tree.insert(8);
+tree.insert(10);
+tree.insert(13);
+tree.insert(12);
+tree.insert(14);
+tree.insert(20);
+tree.insert(18);
+tree.insert(25);
+
+var printNode = function (value) {
+    console.log(value);
+};
+
+tree.inOrderTraverse(printNode);
+console.log('====');
+tree.preOrderTraverse(printNode);
+console.log('====');
+tree.postOrderTraverse(printNode);
+console.log('====');
+console.log(tree.getRoot());
+
+var $tree = document.querySelector('.tree');
+
+/*
+tree.preOrderTraverse(function (value) {
+    var $span = document.createElement('span');
+    $span.innerText = value;
+    $wrap.appendChild($span);
+});
+*/
+
+var setTree = function (node, wrap) {
+    if (node !== null) {
+        var $level = document.createElement('div'), $node = document.createElement('div'), $key = document.createElement('strong');
+        $level.setAttribute('class', 'level');
+        $node.setAttribute('class', 'node');
+        $key.setAttribute('class', 'key');
+        $key.innerText = node.key;
+        $node.appendChild($key);
+        $level.appendChild($node);
+        wrap.appendChild($level);
+        setTree(node.left, $level);
+        setTree(node.right, $level);
+    }
+};
+
+setTree(tree.getRoot(), $tree);
+
 
 </script>
 
