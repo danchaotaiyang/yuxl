@@ -198,22 +198,13 @@ const HashTable = (() => {
 
             let position = djb2HashCode(key);
 
-            if (table.get(this)[position] !== undefined) {
+            if (table.get(this)[position] === undefined) {
+                return false;
+            }
 
-                let current = table.get(this)[position].getHead();
+            let current = table.get(this)[position].getHead();
 
-                while (current.next) {
-                    if (current.element.key === key) {
-
-                        table.get(this)[position].remove(current.element);
-                        if (table.get(this)[position].isEmpty()) {
-                            table.get(this)[position] = undefined;
-                        }
-                        return true;
-                    }
-                    current = current.next;
-                }
-
+            while (current.next) {
                 if (current.element.key === key) {
 
                     table.get(this)[position].remove(current.element);
@@ -222,28 +213,37 @@ const HashTable = (() => {
                     }
                     return true;
                 }
+                current = current.next;
             }
-            return false;
+
+            if (current.element.key === key) {
+
+                table.get(this)[position].remove(current.element);
+                if (table.get(this)[position].isEmpty()) {
+                    table.get(this)[position] = undefined;
+                }
+                return true;
+            }
         }
 
         get(key) {
             let position = djb2HashCode(key);
 
-            if (table.get(this)[position] !== undefined) {
+            if (table.get(this)[position] === undefined) {
+                return undefined;
+            }
 
-                let current = table.get(this)[position].getHead();
-                while (current.next) {
-                    if (current.element.key === key) {
-                        return current.element.value;
-                    }
-                    current = current.next;
-                }
+            let current = table.get(this)[position].getHead();
+
+            while (current.next) {
                 if (current.element.key === key) {
                     return current.element.value;
                 }
+                current = current.next;
             }
-
-            return undefined;
+            if (current.element.key === key) {
+                return current.element.value;
+            }
         }
 
         print() {

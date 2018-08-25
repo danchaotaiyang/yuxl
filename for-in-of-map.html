@@ -16,6 +16,7 @@ var ary3 = [];
 let ary4 = [];
 
 let ary5 = [];
+let ary6 = [];
 
 // ===============================
 
@@ -54,6 +55,18 @@ ary4 = ary.map(i => i);
 console.timeEnd('map');
 
 // ===============================
+
+console.time('for');
+
+for (let i = 0; i < ary.length; i++) {
+    ary6[i] = ary[i];
+}
+
+console.timeEnd('for');
+
+// ===============================
+
+
 
 </script>
 </body>

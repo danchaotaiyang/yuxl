@@ -32,7 +32,9 @@ function Dictionary() {
     };
 
     this.clear = function () {
-        item = {};
+        for (var i in items) {
+            delete items[i];
+        }
     };
 
     this.size = function () {
